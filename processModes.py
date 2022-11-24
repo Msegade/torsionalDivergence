@@ -1,0 +1,70 @@
+from pyNastran.bdf.bdf import BDF
+import pandas as pd
+import tables
+import sys
+from pathlib import Path
+from Wing import Wing
+import pickle
+
+def getEigVectArray(eigenvector, setS, mode):
+    eigvalues = []
+    for node in setS:
+        eigv = eigenvector[(eigenvector['ID'] == node) & \
+                           (eigenvector['DOMAIN_ID'] == mode)]
+        eigvalues.append(eigv[['X','Y','Z','RX','RY','RZ']].tolist()[0])
+    return eigvalues
+
+def getDataFrameForMode(eigenvector, wing, mode):
+
+    setS =  wing.setDict[2]['ids']
+    yPos = wing.yPos[1:]
+    chords = wing.chords
+    eigvalues = getEigVectArray(eigenvector, setS, mode)
+    df1 = pd.DataFrame(zip(yPos, chords), index=setS, 
+                    columns=['Y-Pos', 'Chord'])
+    df2 = pd.DataFrame(eigvalues, index=setS,
+                    columns=['x', 'y', 'z', 'rx', 'ry','rz'])
+    df = pd.concat([df1, df2], axis=1)
+    return df
+
+CWD = Path.cwd()
+wingObj = CWD / 'wing.obj'
+
+with wingObj.open('rb') as f:
+    wing = pickle.load(f)
+
+bdfFileName = sys.argv[1]
+bdf = CWD / bdfFileName
+
+# HDF5
+hdf5FileName = bdf.with_suffix('.h5')
+h5file = tables.open_file(hdf5FileName, 'r')
+eigenvector = h5file.root.NASTRAN.RESULT.NODAL.EIGENVECTOR.read()
+eigenvalues = h5file.root.NASTRAN.RESULT.SUMMARY.EIGENVALUE.read()
+
+dfs = []
+modes = eigenvalues['FREQ']
+
+xlsx = bdf.with_suffix('.xlsx')
+writer = pd.ExcelWriter(xlsx, engine='xlsxwriter')
+for i, mode in enumerate(modes):
+    # HDF5 starts counting at 2
+    n = i+2
+    df = getDataFrameForMode(eigenvector, wing, n)
+    df.to_excel(writer, sheet_name=f'Freq = {mode}')
+    dfs.append(df)
+
+mod = bdf.with_suffix('.mod')
+file = mod.open('w')
+for i, (df, mode)  in enumerate(zip(dfs, modes)):
+    n = i+1
+    file.write(f'{n} {mode} \n')
+    for j, row in enumerate(df.iterrows()):
+        ev = row[1]
+        lineEv = f'{ev.x} {ev.y} {ev.z} {ev.rx} {ev.ry} {ev.rz}'
+        file.write(f'{j+1} {lineEv} \n')
+
+
+file.close()
+h5file.close()
+writer.save()
