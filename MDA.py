@@ -8,6 +8,15 @@ import pandas as pd
 import pickle
 from Wing import Wing
 from time import time
+from socket import gethostname
+
+
+if 'breogan' in gethostname():
+   sing = '/opt/ohpc/pub/libs/singularity/3.4.1/bin/singularity'
+   sif = '/home/mrodriguez/containers/octave_6.2.0.sif'
+   octave = [sing, 'exec', sif]
+else:
+   octave = ['octave',]
 
 CWD = Path.cwd()
 matScript = CWD / 'loads.m'
@@ -24,7 +33,7 @@ analysis=sys.argv[1]
 # First load values
 print('Getting initial load vector')
 doitInit = run(["doit run init:loads.m"], shell=True, stdout = PIPE)
-octaveInit = run(['octave', matScript, '1'], stdout = PIPE)
+octaveInit = run(octave + [matScript, '1'], stdout = PIPE)
 
 ryHistory = []
 
