@@ -79,7 +79,7 @@ def task_nastran():
     nastran = '/opt/nastran/2019/bin/nast20191'
     nastran_opts = ['old=no', 'batch=no', 'mem=1GB', 'scratch=no', 'append=yes']
     bdf = CWD / f'model-{analysis}.bdf'
-    suffixes = ['.op2', '.h5', '.out']
+    suffixes = ['.op2', '.h5', '.out', '.IFPDAT', '.MASTER', '.DBALL']
     if analysis == 'nLinear':
         suffixes.append('.sts')
     return {
@@ -99,8 +99,9 @@ def task_post():
         anglesTxt = CWD / 'RY.txt'
         angles = CWD / 'RY.mat'
         ryHistory = CWD / 'ryHistory.txt'
+        iFU = CWD / 'iteration-F-U.xlsx'
         return {
-                'targets': [angles, anglesTxt, ryHistory],
+                'targets': [angles, anglesTxt, ryHistory, iFU],
                 'file_dep': [h5, script, wingObj],
                 'actions': [['python', script, analysis]],
                 'clean': True
@@ -111,8 +112,9 @@ def task_post():
         anglesTxt = CWD / 'RY.txt'
         angles = CWD / 'RY.mat'
         ryHistory = CWD / 'ryHistory.txt'
+        iFU = CWD / 'iteration-F-U.xlsx'
         return {
-                'targets': [angles, anglesTxt, ryHistory],
+                'targets': [angles, anglesTxt, ryHistory, iFU],
                 'file_dep': [h5, script],
                 'actions': [['python', script, analysis]],
                 'clean': True
@@ -145,10 +147,10 @@ def task_loads():
 
 def task_allClean():
 
-    analyses = ['linear', 'modal', 'nLinear']
-    suffixes = ['.bdf', '.op2', '.h5', '.out', '.sts']
+    analyses = ['linear', 'modal', 'nLinear', 'modal-nLinear-restart']
+    suffixes = ['.op2', '.h5', '.out', '.sts']
     addSuffixes = ['.aeso', '.asm', '.becho', '.f04', '.f06', '.pch', '.plt', '.asg', '.log' \
-                   '.IFPDAT', '.DBALL', '.MASTER']
+                   '.IFPDAT', '.DBALL', '.MASTER', '.mod', '.xlsx']
     nastranFiles = [f'model-{an}{suf}' for an, suf in product(analyses, suffixes + addSuffixes)]
     # model.T7562777 files 
     g = list(CWD.glob('*.T*'))

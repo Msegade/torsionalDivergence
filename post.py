@@ -2,7 +2,7 @@ from pyNastran.bdf.bdf import BDF
 import pandas as pd
 import tables
 from pathlib import Path
-from scipy.io import savemat
+from scipy.io import savemat, loadmat
 import numpy as np
 import sys
 import pickle
@@ -32,14 +32,33 @@ for i in range(1,len(wing.yPos[1:])):
     queryString = queryString + f' | (ID == {5000+i})'
 queryString = f"(DOMAIN_ID == {dId}) & ({queryString})"
 
-angles = []
-for row in disph5.where(queryString):
-    angles.append(row['RY'])
+def addToDict(iterDict, row):
+    dispDict = {}
+    for label in ['X', 'Y', 'Z', 'RX', 'RY', 'RZ']:
+        dispDict[label] = row[label]
+    iterDict[row['ID']] = dispDict
 
+angles = []
+iterDict = {}
+for row in disph5.where(queryString):
+    print(row['ID'])
+    angles.append(row['RY'])
+    addToDict(iterDict, row)
+    
+M = np.loadtxt('load_Um.mat')
+L = np.loadtxt('load_Uz.mat')
+D = np.loadtxt('load_Uy.mat')
+for i, (Mi, Li, Di) in enumerate(zip(M,L,D)):
+    iterDict[5000+i]['M'] = Mi
+    iterDict[5000+i]['L'] = Li
+    iterDict[5000+i]['D'] = Di
+
+df = pd.DataFrame(iterDict)
+df.to_excel('iteration-F-U.xlsx')
+    
 angles = -np.degrees(angles)
 mdict = {'RY': angles}
 savemat('RY.mat', mdict)
 np.savetxt('RY.txt', angles)
-
 
 h5file.close()

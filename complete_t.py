@@ -61,10 +61,7 @@ if __name__ == '__main__':
         bdf.add_moment(1, node, 1.0, (0.0, Mi, 0.0))
 
     bdf.add_grav(2, 1.0, [0.0, 0.0, -1.0])
-    gravFactor = 0.0
-    if {{grav}}:
-        gravFactor=1.0
-    bdf.add_load(3, 1.0, [1.0, gravFactor], [1, 2])
+    bdf.add_load(3, 1.0, [{{aeroFactor}}, {{gravFactor}}], [1, 2])
 
     if sys.argv[1] == 'nLinear':
         bdf.sol = 400

@@ -1,0 +1,26 @@
+assign rsfile='model-nLinear.MASTER'
+restart logical=rsfile
+SOL 400
+CEND
+$CASE CONTROL DECK
+SET 1 = 47442, 47809, 47943, 48090, 48219, 48302, 48358, 48388, 
+        48454, 48538, 48701
+SET 2 = 5000 THRU 5009
+RIGID = LAGRANGE
+SUBCASE 1
+    step 1
+    ANALYSIS = NLSTATIC
+    DISPLACEMENT(PLOT) = ALL
+    LOAD = 3
+    METHOD(STRUCTURE) = 2
+    NLSTEP = 1
+    SPC = 1
+SUBCASE 2
+    step 2
+    ANALYSIS = MODES
+    nlic subcase 1 step 1
+    DISPLACEMENT(PLOT) = ALL
+    METHOD(STRUCTURE) = 2
+    SPC = 1
+BEGIN BULK
+ENDDATA

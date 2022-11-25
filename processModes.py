@@ -5,6 +5,7 @@ import sys
 from pathlib import Path
 from Wing import Wing
 import pickle
+import numpy as np
 
 def getEigVectArray(eigenvector, setS, mode):
     eigvalues = []
@@ -58,7 +59,8 @@ mod = bdf.with_suffix('.mod')
 file = mod.open('w')
 for i, (df, mode)  in enumerate(zip(dfs, modes)):
     n = i+1
-    file.write(f'{n} {mode} \n')
+    # In hertz
+    file.write(f'{n} {mode*2*np.pi} \n')
     for j, row in enumerate(df.iterrows()):
         ev = row[1]
         lineEv = f'{ev.x} {ev.y} {ev.z} {ev.rx} {ev.ry} {ev.rz}'

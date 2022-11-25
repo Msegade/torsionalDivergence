@@ -1,4 +1,6 @@
 U: 400.0
 RY: [2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0]
 tol: 'ADAPT'
-grav: True
+# Loads
+gravFactor: 1.0
+aeroFactor: 1.0

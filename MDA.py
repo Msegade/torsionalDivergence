@@ -66,5 +66,5 @@ if analysis == 'nLinear':
     nastran_opts = ['old=no', 'batch=no', 'mem=1GB', 'scratch=yes', 'append=yes']
     nastran_restart = 'model-nLinear-modal-restart.bdf'
     status = run([[nastran,]+nastran_opts+[nastran_restart,]], shell=True)
-    statusMod = run(['python processModes.py model-nLinear-modal-restart.bdf'])
+    statusMod = run(['python processModes.py model-modal-nLinear-restart.bdf'])
 
