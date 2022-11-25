@@ -14,7 +14,7 @@ from socket import gethostname
 if 'breogan' in gethostname():
    sing = '/opt/ohpc/pub/libs/singularity/3.4.1/bin/singularity'
    sif = '/home/mrodriguez/containers/octave_6.2.0.sif'
-   octave = [sing, 'exec', sif]
+   octave = [sing + ' ' +  'exec' + ' ' + sif  + ' '  + 'octave']
 else:
    octave = ['octave',]
 
@@ -33,7 +33,9 @@ analysis=sys.argv[1]
 # First load values
 print('Getting initial load vector')
 doitInit = run(["doit run init:loads.m"], shell=True, stdout = PIPE)
-octaveInit = run(octave + [matScript, '1'], stdout = PIPE)
+octave[0] = octave[0] + ' ' + matScript.name + ' ' + '1'
+print(octave)
+octaveInit = run(octave, shell=True, stdout = PIPE)
 
 ryHistory = []
 
