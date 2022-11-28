@@ -46,7 +46,7 @@ def divergeExit(message):
     print('Diverged!!')
     results = CWD / 'results.json'
     with results.open('w') as f:
-        json.dump({'mode': 'Diverged'}, f)
+        json.dump({'mode': 'FAIL'}, f)
     sys.exit(1)
 
 
