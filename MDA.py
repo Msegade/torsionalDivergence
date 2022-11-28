@@ -52,7 +52,7 @@ while not np.allclose(ryHistory[-2], ryHistory[-1], atol=1e-3):
     ryHistory.append(ry)
     if np.any(ry > 6.0):
         print('Diverged!!')
-        results = cwd / 'results.json'
+        results = CWD / 'results.json'
         with resultsFileFinal.open('w') as f:
             json.dump({'mode:' 'Diverged'}, f)
         sys.exit(1)
@@ -73,5 +73,5 @@ plt.savefig('Graph.png', dpi=300)
 if analysis == 'nLinear':
     nastran_restart = 'model-nLinear-modal-restart.bdf'
     status = run(nastran + [nastran_restart,], shell=True)
-    statusMod = run(['python processModes.py model-modal-nLinear-restart.bdf'])
+    statusMod = run(["python",  "processModes.py", nastran_restart], shell=True)
 

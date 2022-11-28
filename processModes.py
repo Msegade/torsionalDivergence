@@ -67,10 +67,9 @@ for i, (df, mode)  in enumerate(zip(dfs, modes)):
         lineEv = f'{ev.x} {ev.y} {ev.z} {ev.rx} {ev.ry} {ev.rz}'
         file.write(f'{j+1} {lineEv} \n')
 
-results = cwd / 'results.json'
+results = CWD / 'results.json'
 with resultsFileFinal.open('w') as f:
-    json.dump({'mode:' modes[0]}, f)
-
+    json.dump({'mode': modes[0]}, f)
 
 file.close()
 h5file.close()
