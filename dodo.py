@@ -4,6 +4,7 @@ from itertools import product
 import yaml
 import re
 from jinja2 import Environment, FileSystemLoader
+from config import octave, nastran
 
 loader = yaml.SafeLoader
 loader.add_implicit_resolver(
@@ -76,8 +77,6 @@ def task_model():
 
 def task_nastran():
 
-    nastran = '/opt/nastran/2019/bin/nast20191'
-    nastran_opts = ['old=no', 'batch=no', 'mem=1GB', 'scratch=no', 'append=yes']
     bdf = CWD / f'model-{analysis}.bdf'
     suffixes = ['.op2', '.h5', '.out', '.IFPDAT', '.MASTER', '.DBALL']
     if analysis == 'nLinear':
@@ -85,7 +84,7 @@ def task_nastran():
     return {
             'targets': [bdf.with_suffix(suff) for suff in suffixes],
             'file_dep': [bdf,],
-            'actions': [[nastran,] + nastran_opts + [bdf,]],
+            'actions': [nastran +  [bdf,]],
             'clean': True
             }
             
@@ -141,7 +140,7 @@ def task_loads():
             'targets': loadFiles,
             'file_dep': [angles, matScript],
             # Read RY.mat file -> 0
-            'actions': [['octave', matScript, '0']],
+            'actions': [[octave, matScript, '0']],
             'clean': True
             }
 
@@ -149,7 +148,7 @@ def task_allClean():
 
     analyses = ['linear', 'modal', 'nLinear', 'modal-nLinear-restart']
     suffixes = ['.op2', '.h5', '.out', '.sts']
-    addSuffixes = ['.aeso', '.asm', '.becho', '.f04', '.f06', '.pch', '.plt', '.asg', '.log' \
+    addSuffixes = ['.aeso', '.asm', '.becho', '.f04', '.f06', '.pch', '.plt', '.asg', '.log', \
                    '.IFPDAT', '.DBALL', '.MASTER', '.mod', '.xlsx']
     nastranFiles = [f'model-{an}{suf}' for an, suf in product(analyses, suffixes + addSuffixes)]
     # model.T7562777 files 

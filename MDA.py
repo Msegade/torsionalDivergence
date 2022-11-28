@@ -8,15 +8,7 @@ import pandas as pd
 import pickle
 from Wing import Wing
 from time import time
-from socket import gethostname
-
-
-if 'breogan' in gethostname():
-   sing = '/opt/ohpc/pub/libs/singularity/3.4.1/bin/singularity'
-   sif = '/home/mrodriguez/containers/octave_6.2.0.sif'
-   octave = [sing + ' ' +  'exec' + ' ' + sif  + ' '  + 'octave']
-else:
-   octave = ['octave',]
+from config import octave, nastran
 
 CWD = Path.cwd()
 matScript = CWD / 'loads.m'
@@ -34,7 +26,6 @@ analysis=sys.argv[1]
 print('Getting initial load vector')
 doitInit = run(["doit run init:loads.m"], shell=True, stdout = PIPE)
 octave[0] = octave[0] + ' ' + matScript.name + ' ' + '1'
-print(octave)
 octaveInit = run(octave, shell=True, stdout = PIPE)
 
 ryHistory = []
@@ -73,9 +64,7 @@ plt.savefig('Graph.png', dpi=300)
 
 # Modal analysis
 if analysis == 'nLinear':
-    nastran = '/opt/nastran/2019/bin/nast20191'
-    nastran_opts = ['old=no', 'batch=no', 'mem=1GB', 'scratch=yes', 'append=yes']
     nastran_restart = 'model-nLinear-modal-restart.bdf'
-    status = run([[nastran,]+nastran_opts+[nastran_restart,]], shell=True)
+    status = run([[nastran, nastran_restart,]], shell=True)
     statusMod = run(['python processModes.py model-modal-nLinear-restart.bdf'])
 
