@@ -40,7 +40,8 @@ ryInit = [0.0]*len(ry)
 ryHistory.append(ryInit)
 ryHistory.append(ry)
 
-while not np.allclose(ryHistory[-2], ryHistory[-1], atol=1e-3):
+while (not np.allclose(ryHistory[-2], ryHistory[-1], atol=1e-3)) and  \
+      (not np.any(ry > 6.0)) :
     print(f'Iteration {len(ryHistory)}')
     start = time()
     status = run([f"doit -a loads analysis={analysis}"], shell=True, check=True)
