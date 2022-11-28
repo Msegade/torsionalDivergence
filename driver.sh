@@ -59,7 +59,9 @@ if [[ "$(hostname)" == *'ve'* ]]; then
 elif [[ "$(hostname)" == *'breogan'* ]]; then
     PYTHON=pythonLaunch
 fi
-$PYTHON MDA.py nLinear
+
+U=$(dprepro $params parameters.yaml.template | grep U | tr -d ' ' | cut -d':' -f2)
+TITLE=U$U $PYTHON MDA.py nLinear
 #doit design
 #sed "s/#NAME/#PBS -N $(basename $PWD)/" doit-template.sh > doit-launcher.sh
 #qsub -Wblock=true doit-launcher.sh

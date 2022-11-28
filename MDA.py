@@ -52,6 +52,9 @@ while not np.allclose(ryHistory[-2], ryHistory[-1], atol=1e-3):
     ryHistory.append(ry)
     if np.any(ry > 6.0):
         print('Diverged!!')
+        results = cwd / 'results.json'
+        with resultsFileFinal.open('w') as f:
+            json.dump({'mode:' 'Diverged'}, f)
         sys.exit(1)
 
 
