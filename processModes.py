@@ -49,9 +49,11 @@ modes = eigenvalues['FREQ']
 
 xlsx = bdf.with_suffix('.xlsx')
 writer = pd.ExcelWriter(xlsx, engine='xlsxwriter')
+
+n0 = min(eigenvector['DOMAIN_ID'])
 for i, mode in enumerate(modes):
-    # HDF5 starts counting at 2
-    n = i+2
+    # Start at first domain_id
+    n = n0+i
     df = getDataFrameForMode(eigenvector, wing, n)
     df.to_excel(writer, sheet_name=f'Freq = {mode}')
     dfs.append(df)
@@ -68,7 +70,7 @@ for i, (df, mode)  in enumerate(zip(dfs, modes)):
         file.write(f'{j+1} {lineEv} \n')
 
 results = CWD / 'results.json'
-with resultsFileFinal.open('w') as f:
+with results.open('w') as f:
     json.dump({'mode': modes[0]}, f)
 
 file.close()
