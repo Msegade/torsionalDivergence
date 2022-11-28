@@ -1,10 +1,9 @@
 from socket import gethostname
 
 if 'breogan' in gethostname():
+
    # Octave Container
-   sing = '/opt/ohpc/pub/libs/singularity/3.4.1/bin/singularity'
-   sif = '/home/mrodriguez/containers/octave_6.2.0.sif'
-   octave = [sing + ' ' +  'exec' + ' ' + sif  + ' '  + 'octave',]
+   octave = ['octaveSing',]
 
    # Nastran launcher
    nastran = ['nastranLaunch',]
