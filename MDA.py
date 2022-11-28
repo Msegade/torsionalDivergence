@@ -40,8 +40,7 @@ ryInit = [0.0]*len(ry)
 ryHistory.append(ryInit)
 ryHistory.append(ry)
 
-while (not np.allclose(ryHistory[-2], ryHistory[-1], atol=1e-3)) and  \
-      (not np.any(ry > 6.0)) :
+while not np.allclose(ryHistory[-2], ryHistory[-1], atol=1e-3)
     print(f'Iteration {len(ryHistory)}')
     start = time()
     status = run([f"doit -a loads analysis={analysis}"], shell=True, check=True)
@@ -51,6 +50,10 @@ while (not np.allclose(ryHistory[-2], ryHistory[-1], atol=1e-3)) and  \
     print('Angles: ')
     print(ry)
     ryHistory.append(ry)
+    if np.any(ry > 6.0):
+        print('Diverged!!')
+        sys.exit(1)
+
 
 with open('wing.obj', 'rb') as f:
     wing = pickle.load(f)
