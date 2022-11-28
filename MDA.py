@@ -65,6 +65,6 @@ plt.savefig('Graph.png', dpi=300)
 # Modal analysis
 if analysis == 'nLinear':
     nastran_restart = 'model-nLinear-modal-restart.bdf'
-    status = run([[nastran, nastran_restart,]], shell=True)
+    status = run([nastran + [nastran_restart,]], shell=True)
     statusMod = run(['python processModes.py model-modal-nLinear-restart.bdf'])
 

@@ -1,0 +1,52 @@
+environment
+	tabular_data
+		tabular_data_file "tabular.dat"
+	output_file "dakota.out"
+	error_file "dakota.err"
+	write_restart "dakota.rst"
+
+method
+	list_parameter_study
+		model_pointer "model"
+        list_of_points = 
+                        300 
+                        350
+                        400
+                        450
+                        500
+                        550
+                        600
+                        650
+                        700
+
+model
+	id_model "model"
+	single
+		interface_pointer "interface"
+	variables_pointer "variables"
+	responses_pointer "responses"
+
+variables
+	id_variables "variables"
+	continuous_design 1
+        descriptors 'U'  
+
+interface
+    id_interface "interface"
+	analysis_drivers "driver.sh"
+		fork
+			parameters_file "params.in"
+			results_file "results.out"
+            file_save
+			work_directory
+				named "run"
+				directory_tag
+				directory_save
+	asynchronous
+		evaluation_concurrency 9
+
+responses
+	id_responses "responses"
+	response_functions 1
+	no_gradients
+	no_hessians

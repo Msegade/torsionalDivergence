@@ -6,6 +6,7 @@ from pathlib import Path
 from Wing import Wing
 import pickle
 import numpy as np
+import json
 
 def getEigVectArray(eigenvector, setS, mode):
     eigvalues = []
@@ -65,6 +66,10 @@ for i, (df, mode)  in enumerate(zip(dfs, modes)):
         ev = row[1]
         lineEv = f'{ev.x} {ev.y} {ev.z} {ev.rx} {ev.ry} {ev.rz}'
         file.write(f'{j+1} {lineEv} \n')
+
+results = cwd / 'results.json'
+with resultsFileFinal.open('w') as f:
+    json.dump({'mode:' modes[0]}, f)
 
 
 file.close()

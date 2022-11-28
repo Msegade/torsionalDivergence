@@ -140,7 +140,7 @@ def task_loads():
             'targets': loadFiles,
             'file_dep': [angles, matScript],
             # Read RY.mat file -> 0
-            'actions': [[octave, matScript, '0']],
+            'actions': [octave + [matScript, '0']],
             'clean': True
             }
 
