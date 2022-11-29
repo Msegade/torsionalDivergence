@@ -75,7 +75,7 @@ TITLE=U$U $PYTHON MDA.py nLinear
 ##
 ###############################################################################
 
-mode=$(jq '.mode' results.json)
+mode=$(jq '.mode-1' results.json)
 
 echo $mode > $results
 

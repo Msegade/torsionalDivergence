@@ -9,6 +9,11 @@ method
 	list_parameter_study
 		model_pointer "model"
         list_of_points = 
+                         50 
+                        100 
+                        150 
+                        200 
+                        250 
                         300 
                         350
                         400
@@ -33,6 +38,7 @@ variables
 
 interface
     id_interface "interface"
+    failure_capture continue
 	analysis_drivers "driver.sh"
 		fork
 			parameters_file "params.in"
@@ -43,7 +49,7 @@ interface
 				directory_tag
 				directory_save
 	asynchronous
-		evaluation_concurrency 9
+		evaluation_concurrency 14
 
 responses
 	id_responses "responses"

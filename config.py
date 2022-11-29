@@ -12,7 +12,7 @@ else:
    octave = ['octave',]
 
    nastran = '/opt/nastran/2019/bin/nast20191'
-   nastran_opts = ['old=no', 'batch=no', 'mem=1GB', 'scratch=yes', 'append=yes']
+   nastran_opts = ['old=no', 'batch=no', 'mem=1GB', 'scratch=no', 'append=yes']
    nastran = [nastran,] + nastran_opts
    #nastran_opts = ' old=no batch=no mem=1GB scratch=yes append=yes'
 

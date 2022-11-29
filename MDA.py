@@ -11,6 +11,24 @@ from Wing import Wing
 from time import time
 from config import octave, nastran
 
+def writeCsv(ryHistory, wing):
+    ryDict = {f'Iteration-{i+1}': ry  for i, ry in enumerate(ryHistory)}
+    ryDict['yPos'] = wing.yPos[1:]
+    df = pd.DataFrame(ryDict)
+    df.set_index('yPos', inplace=True)
+    df.to_csv(f'ryHistory-{analysis}.csv')
+    sns.lineplot(data=df)
+    n = len(ryHistory)
+    plt.savefig('Graph-{n}.png', dpi=300)
+
+def divergeExit(message):
+    print(message)
+    print('Diverged!!')
+    results = CWD / 'results.json'
+    with results.open('w') as f:
+        json.dump({'mode': 'FAIL'}, f)
+    sys.exit(1)
+
 CWD = Path.cwd()
 matScript = CWD / 'loads.m'
 
@@ -30,6 +48,8 @@ octave[0] = octave[0] + ' ' + matScript.name + ' ' + '1'
 octaveInit = run(octave, shell=True, stdout = PIPE)
 
 ryHistory = []
+with open('wing.obj', 'rb') as f:
+    wing = pickle.load(f)
 
 # First iteration
 print('Iteration 1')
@@ -40,15 +60,7 @@ print(ry)
 ryInit = [0.0]*len(ry)
 ryHistory.append(ryInit)
 ryHistory.append(ry)
-
-def divergeExit(message):
-    print(message)
-    print('Diverged!!')
-    results = CWD / 'results.json'
-    with results.open('w') as f:
-        json.dump({'mode': 'FAIL'}, f)
-    sys.exit(1)
-
+writeCsv(ryHistory, wing)
 
 while not np.allclose(ryHistory[-2], ryHistory[-1], atol=1e-3):
     print(f'Iteration {len(ryHistory)}')
@@ -63,20 +75,12 @@ while not np.allclose(ryHistory[-2], ryHistory[-1], atol=1e-3):
     print('Angles: ')
     print(ry)
     ryHistory.append(ry)
+    writeCsv(ryHistory, wing)
     if np.any(ry > 6.0):
         divergeExit('Angles values too high')
 
 
-with open('wing.obj', 'rb') as f:
-    wing = pickle.load(f)
 
-ryDict = {f'Iteration-{i+1}': ry  for i, ry in enumerate(ryHistory)}
-ryDict['yPos'] = wing.yPos[1:]
-df = pd.DataFrame(ryDict)
-df.set_index('yPos', inplace=True)
-df.to_csv(f'ryHistory-{analysis}.csv')
-sns.lineplot(data=df)
-plt.savefig('Graph.png', dpi=300)
 
 # Modal analysis
 if analysis == 'nLinear':

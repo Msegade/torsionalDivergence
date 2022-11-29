@@ -9,7 +9,7 @@ import pickle
 # Import class for pickling
 from Wing import Wing
 
-cwd = Path.cwd()
+CWD = Path.cwd()
 
 errorMessage='''Usage: python post.py <analysis>
        analysis: linear, nLinear or modal'''
@@ -54,7 +54,14 @@ for i, (Mi, Li, Di) in enumerate(zip(M,L,D)):
     iterDict[5000+i]['D'] = Di
 
 df = pd.DataFrame(iterDict)
-df.to_excel('iteration-F-U.xlsx')
+iterationFile = CWD / 'iteration-F-U.xlsx'
+if iterationFile.is_file():
+    xlsx = pd.ExcelFile(iterationFile)
+    nSheets = len(xlsx.sheet_names)
+    with pd.ExcelWriter(iterationFile, engine='openpyxl', mode='a') as writer:
+        df.to_excel(writer, sheet_name=f'Iteration-{nSheets+1}')
+else:
+    df.to_excel(iterationFile, sheet_name=f'Iteration-1')
     
 angles = -np.degrees(angles)
 mdict = {'RY': angles}

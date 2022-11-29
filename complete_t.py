@@ -56,7 +56,7 @@ if __name__ == '__main__':
     wing.addSet(2, set2, coords)
 
     for node, (Di, Li, Mi) in zip(set2, zip(D,L,M)):
-        bdf.add_force(1, node, 1.0, (-Di, 0.0, 0.0))
+        bdf.add_force(1, node, 1.0, (Di, 0.0, 0.0))
         bdf.add_force(1, node, 1.0, (0.0, 0.0, Li))
         bdf.add_moment(1, node, 1.0, (0.0, Mi, 0.0))
 

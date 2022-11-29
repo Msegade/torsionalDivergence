@@ -97,10 +97,9 @@ def task_post():
         script = CWD / 'post.py'
         anglesTxt = CWD / 'RY.txt'
         angles = CWD / 'RY.mat'
-        ryHistory = CWD / 'ryHistory.txt'
         iFU = CWD / 'iteration-F-U.xlsx'
         return {
-                'targets': [angles, anglesTxt, ryHistory, iFU],
+                'targets': [angles, anglesTxt, iFU],
                 'file_dep': [h5, script, wingObj],
                 'actions': [['python', script, analysis]],
                 'clean': True
@@ -110,10 +109,9 @@ def task_post():
         script = CWD / 'post.py'
         anglesTxt = CWD / 'RY.txt'
         angles = CWD / 'RY.mat'
-        ryHistory = CWD / 'ryHistory.txt'
         iFU = CWD / 'iteration-F-U.xlsx'
         return {
-                'targets': [angles, anglesTxt, ryHistory, iFU],
+                'targets': [angles, anglesTxt, iFU],
                 'file_dep': [h5, script],
                 'actions': [['python', script, analysis]],
                 'clean': True
