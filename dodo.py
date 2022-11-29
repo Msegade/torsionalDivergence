@@ -84,7 +84,7 @@ def task_nastran():
     return {
             'targets': [bdf.with_suffix(suff) for suff in suffixes],
             'file_dep': [bdf,],
-            'actions': [nastran +  [bdf,]],
+            'actions': [['sync',], nastran +  [bdf,]],
             'clean': True
             }
             

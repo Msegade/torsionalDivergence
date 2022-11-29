@@ -19,7 +19,7 @@ def writeCsv(ryHistory, wing):
     df.to_csv(f'ryHistory-{analysis}.csv')
     sns.lineplot(data=df)
     n = len(ryHistory)
-    plt.savefig('Graph-{n}.png', dpi=300)
+    plt.savefig(f'Graph-{n}.png', dpi=300)
 
 def divergeExit(message):
     print(message)
@@ -79,8 +79,6 @@ while not np.allclose(ryHistory[-2], ryHistory[-1], atol=1e-3):
     writeCsv(ryHistory, wing)
     if np.any(ry > 6.0):
         divergeExit('Angles values too high')
-
-
 
 
 # Modal analysis
