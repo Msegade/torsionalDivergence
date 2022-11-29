@@ -80,9 +80,15 @@ while not np.allclose(ryHistory[-2], ryHistory[-1], atol=1e-3):
     if np.any(ry > 6.0):
         divergeExit('Angles values too high')
 
+if np.allclose(ryHistory[-2], ryHistory[-1], atol=1e-3):
+    print('Analysis converged')
 
+
+print(f'Analysis is {analysis}')
+print(f'Entering modal analysis')
 # Modal analysis
 if analysis == 'nLinear':
+    print(f'Nastran restart')
     nastran_restart = 'model-nLinear-modal-restart.bdf'
     status = run(nastran + [nastran_restart,], shell=True)
     statusMod = run(["python",  "processModes.py", nastran_restart], shell=True)
