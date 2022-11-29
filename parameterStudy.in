@@ -38,7 +38,7 @@ variables
 
 interface
     id_interface "interface"
-    failure_capture continue
+    failure_capture continuation
 	analysis_drivers "driver.sh"
 		fork
 			parameters_file "params.in"

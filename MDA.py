@@ -47,16 +47,17 @@ doitInit = run(["doit run init:loads.m"], shell=True, stdout = PIPE)
 octave[0] = octave[0] + ' ' + matScript.name + ' ' + '1'
 octaveInit = run(octave, shell=True, stdout = PIPE)
 
-ryHistory = []
-with open('wing.obj', 'rb') as f:
-    wing = pickle.load(f)
 
 # First iteration
 print('Iteration 1')
 status = run([f"doit run -a loads analysis={analysis}"], shell=True, check=True)
+# Load wing object
+with open('wing.obj', 'rb') as f:
+    wing = pickle.load(f)
 ry = np.loadtxt('RY.txt')
 print('Angles: ')
 print(ry)
+ryHistory = []
 ryInit = [0.0]*len(ry)
 ryHistory.append(ryInit)
 ryHistory.append(ry)
