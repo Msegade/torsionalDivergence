@@ -71,7 +71,7 @@ for i, (df, mode)  in enumerate(zip(dfs, modes)):
 
 results = CWD / 'results.json'
 with results.open('w') as f:
-    json.dump({'mode-{i+1}': modes[i], for i, mode in enumerate(modes)}, f)
+    json.dump({f'mode-{i+1}': modes[i] for i, mode in enumerate(modes)}, f)
 
 file.close()
 h5file.close()
