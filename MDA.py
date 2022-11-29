@@ -89,7 +89,7 @@ print(f'Entering modal analysis')
 # Modal analysis
 if analysis == 'nLinear':
     print(f'Nastran restart')
-    nastran_restart = 'model-nLinear-modal-restart.bdf'
-    status = run(nastran + [nastran_restart,], shell=True)
-    statusMod = run(["python",  "processModes.py", nastran_restart], shell=True)
+    nastran_restart = 'model-modal-nLinear-restart.bdf'
+    status = run([nastran[0] + ' ' nastran_restart], shell=True)
+    statusMod = run(["python processModes.py " + nastran_restart], shell=True)
 
