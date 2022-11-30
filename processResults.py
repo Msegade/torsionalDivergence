@@ -14,9 +14,21 @@ dirs = baseDir.glob('run*')
 destDir = baseDir / 'results'
 destDir.mkdir(exist_ok=True)
 
+def getZRyLastIteration(xlsx, node=5009):
+
+    xlsx = pd.ExcelFile(xlsx)
+    nSheets = len(xlsx.sheet_names)
+
+    df = pd.read_excel(xlsx, sheet_name=f'Iteration-{nSheets}')
+    df.set_index('Unnamed: 0', inplace=True)
+    RY = df[node].RY
+    Z = df[node].Z
+    return Z, RY
 
 modesDir = {}
 Uconv = []
+Zs = []
+RYs = []
 for d in dirs:
     #ui = U[int(d.name.split('.')[1])-1]
     with (d / 'parameters.yaml').open('r') as f:
@@ -30,36 +42,42 @@ for d in dirs:
     Uconv.append(ui)
     copy(mod, destDir / f'{int(ui)}.mod')
     copy(xlsx, destDir / f'{int(ui)}.xlsx')
+    Z, RY = getZRyLastIteration(xlsx)
+    Zs.append(Z)
+    RYs.append(RY)
     file = d / 'results.json'
     if not file.is_file():
         print(f'{d} does not have results.json')
     else:
         with file.open('r') as f:
             modesDir[ui] = json.load(f)          
+
         
-#print(modesDir)
-
-#U = [50, 100, 150, 200, 250, 300, 350, 400, 450]
-#modesDir = {}
-#for i, ui in enumerate(U):
-#    modesDir[ui] = udir['run.' + str(i+1)]
-#
-
 U = np.sort(Uconv)
 print("U = ", U)
 fig, ax = plt.subplots()
-for ui in U:
-    for i in range(1,11):
-        mode = [modesDir[ui][f'mode-{i}'] for ui in U]
-        fig2 , ax2 = plt.subplots()
-        ax2.plot(U, mode, label=f'mode-{i}')
-        ax2.legend()
-        plt.savefig(destDir / f'mode-{i}.png', dpi=300)
-        plt.close(fig2)
-        ax.plot(U, mode, label=f'mode-{i}')
+for i in range(1,11):
+    mode = [modesDir[ui][f'mode-{i}'] for ui in U]
+    fig2 , ax2 = plt.subplots()
+    ax2.plot(U, mode, label=f'mode-{i}')
+    ax2.legend()
+    plt.savefig(destDir / f'mode-{i}.png', dpi=300)
+    plt.close(fig2)
+    ax.plot(U, mode, label=f'mode-{i}')
 
 #ax.legend()
 plt.savefig(destDir / f'allModes.png', dpi=300)
+plt.close(fig)
+
+
+RYs = np.degrees(RYs)
+fig, ax = plt.subplots()
+ax.plot(U, Zs, label='Z')
+ax.set_ylabel('Vertical Displacement')
+ax2 = ax.twinx()
+ax2.plot(U, RYs, label='RY', color='r')
+ax2.set_ylabel('Tip Angle')
+plt.savefig(destDir / 'U-ZRY.png', dpi=300)
 
 
 
