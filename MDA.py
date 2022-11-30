@@ -78,7 +78,7 @@ while not np.allclose(ryHistory[-2], ryHistory[-1], atol=1e-3):
     print(ry)
     ryHistory.append(ry)
     writeCsv(ryHistory, wing)
-    if np.any(ry > 6.0):
+    if np.any(ry > 12.0):
         divergeExit('Angles values too high')
 
 if np.allclose(ryHistory[-2], ryHistory[-1], atol=1e-3):

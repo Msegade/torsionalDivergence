@@ -9,19 +9,19 @@ method
 	list_parameter_study
 		model_pointer "model"
         list_of_points = 
-                         50 
-                        100 
-                        150 
-                        200 
-                        250 
-                        300 
-                        350
-                        400
-                        450
+                        470
+                        475
+                        480
+                        485
+                        490
+                        495
                         500
-                        550
+                        505
+                        515
                         600
+                        625
                         650
+                        675
                         700
 
 model
