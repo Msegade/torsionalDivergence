@@ -63,6 +63,16 @@ if __name__ == '__main__':
     bdf.add_grav(2, 1.0, [0.0, 0.0, -1.0])
     bdf.add_load(3, 1.0, [{{aeroFactor}}, {{gravFactor}}], [1, 2])
 
+    # Properties
+    # Spars and ribs
+    bdf.properties[1].t = {{tspars}}
+    # Skin
+    bdf.properties[3].t = {{tskin}}
+
+    # Materials 
+    # Density
+    bdf.materials[1].rho = {{rho}}
+
     if sys.argv[1] == 'nLinear':
         bdf.sol = 400
         bdf.write_bdf('model-nLinear.bdf')

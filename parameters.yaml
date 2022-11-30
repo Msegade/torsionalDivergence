@@ -4,3 +4,8 @@ tol: 'ADAPT'
 # Loads
 gravFactor: 1.0
 aeroFactor: 1.0
+# Properties
+tskin: 0.03
+tspars: 0.01
+# Materials
+rho: 1390

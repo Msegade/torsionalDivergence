@@ -15,6 +15,7 @@ step 1
     load = 3
     METHOD(STRUCTURE) =        2
     DISPLACEMENT(PLOT) = ALL
+    MEFFMASS(ALL)=YES
 BEGIN BULK
 PARAM,POST,-1      
 PARAM,prtmaxim,yes

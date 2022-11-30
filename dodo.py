@@ -119,10 +119,11 @@ def task_post():
 
     if analysis == 'modal':
         script = CWD / 'processModes.py'
-        mod = CWD / 'results.mod'
-        xlsx = CWD / 'results.xlsx'
+        mod = h5.with_suffix('.mod')
+        xlsx = h5.with_suffix('.xlsx')
+        json = CWD / 'results.json'
         return {
-                'targets': [mod, xlsx,],
+                'targets': [mod, xlsx, json],
                 'file_dep': [h5, script, wingObj],
                 'actions': [['python', script, 'model-modal.bdf']],
                 'clean': True
