@@ -65,13 +65,13 @@ if __name__ == '__main__':
 
     # Properties
     # Spars and ribs
-    bdf.properties[1].t = {{tspars}}
+    bdf.properties[1].t = float({{tspars}})
     # Skin
-    bdf.properties[3].t = {{tskin}}
+    bdf.properties[3].t = float({{tskin}})
 
     # Materials 
     # Density
-    bdf.materials[1].rho = {{rho}}
+    bdf.materials[1].rho = float({{rho}})
 
     if sys.argv[1] == 'nLinear':
         bdf.sol = 400
