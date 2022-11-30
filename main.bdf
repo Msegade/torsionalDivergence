@@ -20,7 +20,7 @@ BEGIN BULK
 PARAM,POST,-1      
 PARAM,prtmaxim,yes
 PARAM,lgdisp, 1
-nlstep       1
+nlstep       1          severely
           adapt
 mdlprm,hdf5,1
 GRID           1        3.307402.3585687-8.232-2

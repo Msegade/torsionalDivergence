@@ -52,11 +52,19 @@ for d in dirs:
         with file.open('r') as f:
             modesDir[ui] = json.load(f)          
 
-        
+# Sort arrays based on U        
 U = np.sort(Uconv)
-print("U = ", U)
+idx = np.argsort(Uconv)
+Zs = np.array(Zs)
+RYs = np.degrees(RYs)
+Zs = Zs[idx]
+RYs = RYs[idx]
+
+nModes = len(modesDir[U[0]].keys())
+nModes = 9
+
 fig, ax = plt.subplots()
-for i in range(1,11):
+for i in range(1,nModes+1):
     mode = [modesDir[ui][f'mode-{i}'] for ui in U]
     fig2 , ax2 = plt.subplots()
     ax2.plot(U, mode, label=f'mode-{i}')
@@ -70,13 +78,14 @@ plt.savefig(destDir / f'allModes.png', dpi=300)
 plt.close(fig)
 
 
-RYs = np.degrees(RYs)
 fig, ax = plt.subplots()
 ax.plot(U, Zs, label='Z')
 ax.set_ylabel('Vertical Displacement')
+ax.legend()
 ax2 = ax.twinx()
 ax2.plot(U, RYs, label='RY', color='r')
 ax2.set_ylabel('Tip Angle')
+ax2.legend()
 plt.savefig(destDir / 'U-ZRY.png', dpi=300)
 
 
