@@ -20,6 +20,7 @@ def writeCsv(ryHistory, wing):
     sns.lineplot(data=df)
     n = len(ryHistory)
     plt.savefig(f'Graph-{n}.png', dpi=300)
+    plt.close()
 
 def divergeExit(message):
     print(message)
