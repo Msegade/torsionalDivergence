@@ -73,6 +73,11 @@ if __name__ == '__main__':
     # Density
     bdf.materials[1].rho = float({{rho}})
 
+    # NL params
+    cardFields = ['nlstep',1,None,{{nlstep}},None,None,None,None,
+                  None,'adapt']
+    bdf.add_card(cardFields, 'nlstep', is_list=True)
+
     if sys.argv[1] == 'nLinear':
         bdf.sol = 400
         bdf.write_bdf('model-nLinear.bdf')

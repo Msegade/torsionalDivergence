@@ -8,4 +8,6 @@ aeroFactor: 1.0
 tskin: 0.03
 tspars: 0.01
 # Materials
-rho: 1390
+rho: 2870
+# NLstep
+nlstep: null
