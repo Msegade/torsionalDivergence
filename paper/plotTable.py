@@ -35,5 +35,5 @@ ax3.set_ylabel('Tip torsional rotation $\\theta$ [$^{\circ}$]')
 #ax.legend(lines+lines2+lines3, labels + labels2 + labels3, loc=0)
 fig.legend(loc='center left', bbox_to_anchor=(0.2, 0.5))
 
-plt.savefig('U-Ucr.png', dpi=300)
+plt.savefig('U-Ucr.pdf', dpi=300)
 plt.close()

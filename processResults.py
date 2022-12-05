@@ -6,6 +6,11 @@ import matplotlib.pyplot as plt
 from shutil import copy
 import sys
 import yaml
+import seaborn as sns
+plt.rcParams.update({'text.usetex': True})
+
+sns.set()
+sns.set_palette('viridis', n_colors=9)
 
 cwd = Path.cwd()
 baseDir = cwd / sys.argv[1]
@@ -71,23 +76,29 @@ for i in range(1,nModes+1):
     ax2.legend()
     plt.savefig(destDir / f'mode-{i}.png', dpi=300)
     plt.close(fig2)
-    ax.plot(U, mode, label=f'mode-{i}')
+    ax.plot(U, mode, label=f'$\omega_{i}$')
+    ax.annotate(f'$\omega_{i}$', (40, mode[0]))
+
 
 #ax.legend()
-plt.savefig(destDir / f'allModes.png', dpi=300)
+fig = ax.get_figure()
+fig.set_size_inches(9.0, 3.5)
+fig.tight_layout()
+ax.set_xlabel('Free stream velocity $U$ [m/s]')
+ax.set_ylabel('Natural mode frequency $\omega_i$ [Hz]')
+#ax.legend(loc='right')
+plt.savefig(destDir / f'allModes.pdf', dpi=300, bbox_inches = 'tight')
 plt.close(fig)
 
 
 fig, ax = plt.subplots()
 ax.plot(U, Zs, label='Z')
 ax.set_ylabel('Vertical Displacement')
-ax.legend()
+#ax.legend()
 ax2 = ax.twinx()
 ax2.plot(U, RYs, label='RY', color='r')
 ax2.set_ylabel('Tip Angle')
 ax2.legend()
 plt.savefig(destDir / 'U-ZRY.png', dpi=300)
-
-
 
 
